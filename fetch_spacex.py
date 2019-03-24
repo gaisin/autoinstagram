@@ -8,8 +8,7 @@ def fetch_spacex_last_launch():
     latest_launch = response.json()
     images_links = latest_launch['links']['flickr_images']
 
-    if not os.path.exists('images'):
-        os.mkdir('images')
+    os.makedirs('images', exist_ok=True)
 
     for i, image_link in enumerate(images_links, start=1):
         image_name = 'spacex{}.jpg'.format(i)
