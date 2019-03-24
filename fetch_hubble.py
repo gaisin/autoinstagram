@@ -7,14 +7,11 @@ def fetch_hubble_image_by_id(image_id):
     image_url = '{}{}'.format(url, image_id)
     response = requests.get(image_url)
     image_info = response.json()
-    image_links = []
-    for file in image_info['image_files']:
-        image_links.append(file['file_url'])
+    image_links = [file['file_url'] for file in image_info['image_files']]
     latest_link = image_links[-1]
     image_ext = latest_link.split('.')[-1]
 
-    if not os.path.exists('images'):
-        os.mkdir('images')
+    os.makedirs('images', exist_ok=True)
 
     image_saving_path = 'images/{}.{}'.format(image_id, image_ext)
     response = requests.get(latest_link)
@@ -40,9 +37,7 @@ def get_hubble_images_ids_by_collection(collection_name):
 def main():
     hubble_images_ids = get_hubble_images_ids_by_collection('printshop')
     for image_id in hubble_images_ids:
-        print('Fetching image id {}... '.format(image_id))
         fetch_hubble_image_by_id(image_id)
-        print('done')
 
 
 if __name__ == '__main__':
